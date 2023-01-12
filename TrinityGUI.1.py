@@ -269,7 +269,7 @@ class StartPage(tk.Frame):
         ####### Updating Labels from the weather station ###############
 
         list_of_files = glob.glob(WXDIR + '*_*')  # * means all if need specific format then *.csv
-        latest_file = min(list_of_files, key=os.path.getctime) # gets the latest weather data file
+        latest_file = max(list_of_files, key=os.path.getctime) # gets the latest weather data file
         weather_data_location = latest_file
 
         # print(latest_file) # checks which file is being read in
