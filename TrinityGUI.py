@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 
 ##################################################################
@@ -25,6 +26,10 @@
 
 
 # imports
+=======
+#!/usr/bin/python3
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 import math
 import tkinter as tk
 from random import random
@@ -37,6 +42,7 @@ import matplotlib.pyplot as plt
 import datetime
 from astropy.io import ascii
 import numpy as np
+<<<<<<< HEAD
 import pickle
 import pyscreenshot as ImageGrab
 import sys
@@ -48,10 +54,21 @@ import subprocess
 '''
 HOMEDIR = 'C:/Users/Ginkl/Documents/TrintyWork/'  # sofia laptop
 # HOMEDIR = '/mnt/c/Users/Ginkl/Documents/TrintyWork/' # sofia laptop linux
+=======
+import sys
+
+LARGEFONT = ("Verdana", 35,)
+MedFONT = ("Verdana", 25)
+SmFONT = ("Verdana", 15)
+
+'''
+HOMEDIR = 'C:/Users/Ginkl/Documents/TrintyWork/'
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 CAMDIR = HOMEDIR + "Cams/"
 INCAMDIR = CAMDIR + "In/"
 OUTCAMDIR = CAMDIR + "Out/"
 WXDIR = HOMEDIR + 'Weather_data/'
+<<<<<<< HEAD
 WPDIR = HOMEDIR + 'weather_plots/'
 '''
 # Potts' computer
@@ -88,6 +105,17 @@ print("Trinity GUI Loading...") # used to show the user the program has started 
 
 # this class creates a pop up window
 # this code is taken from the internet
+=======
+'''
+
+HOMEDIR = "/home/mpotts32/"
+CAMDIR = HOMEDIR + "cams/"
+INCAMDIR = CAMDIR + "IN/"
+OUTCAMDIR = CAMDIR + "OUT/"
+WXDIR = HOMEDIR + "weather/"
+
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 class popupWindow(object):
     def __init__(self, master):
         top = self.top = tk.Toplevel(master)
@@ -102,9 +130,12 @@ class popupWindow(object):
         self.value = self.e.get()
         self.top.destroy()
 
+<<<<<<< HEAD
 
 # This class holds the structor of the tkinter gui structure allowing for multiple pages
 # this code is taken from the internet
+=======
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 class tkinterApp(tk.Tk):
 
     # __init__ function for class tkinterApp
@@ -142,6 +173,7 @@ class tkinterApp(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
+<<<<<<< HEAD
 
 # This method is used to load in the weather data from the desired file from the trinity weather station
 # and put everything to an array for easy access
@@ -184,6 +216,8 @@ def open_file(filename):
         subprocess.call([opener, filename])
 
 
+=======
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 # first window frame startpage
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -191,11 +225,17 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # label of frame Layout 2
+<<<<<<< HEAD
         ttk.Label(self, text="Trinity GUI", font=LARGEFONT).place(x=25, y=25)
 
         ########## Door Buttons ##########
         # this defintiion creates random output messages for the door as a place holder
 
+=======
+        ttk.Label(self, text="Trinty GUI", font=LARGEFONT).place(x=25, y=25)
+
+        ####### Door Buttons #############
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
         def random_status():
             Door_message = ttk.Label(self)
             # Door_message.place_forget()
@@ -208,6 +248,7 @@ class StartPage(tk.Frame):
             else:
                 statement = 'ERROR Door wont shut'
 
+<<<<<<< HEAD
             Door_message.config(text=statement)  # gets the label ready
 
             Door_message.place(x=25,
@@ -233,19 +274,54 @@ class StartPage(tk.Frame):
         door_o_button.place(x=25, y=125, height=50, width=150)
 
 
+=======
+            Door_message.config(text=statement)
+
+            Door_message.place(x=25, y=375)
+            Door_message.after(5000, Door_message.destroy)
+
+        # canvas.create_rectangle(10,100,1000,500,outline ="black",fill ="white",width = 2)
+        # canvas.place(x=750)
+
+        def door_open():
+            this_b = tk.Label(self, text='Door Opening')
+            #os.system("") #script to open doors
+            this_b.place(x=75, y=175)
+            this_b.after(5000, this_b.destroy)
+
+        def door_close():
+            this_b = tk.Label(self, text='Door Closing')
+            #os.system("") #script to close doors
+            this_b.place(x=75, y=275)
+            this_b.after(5000, this_b.destroy)
+
+        door_o_button = ttk.Button(self, text="Door Open", command=door_open)
+        door_o_button.place(x=25, y=125, height=50, width=150)
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
         door_c_button = ttk.Button(self, text="Door Close", command=door_close)
         door_c_button.place(x=25, y=225, height=50, width=150)
 
         door_status_button = ttk.Button(self, text="Check Status", command=random_status)
         door_status_button.place(x=25, y=325, height=50, width=150)
 
+<<<<<<< HEAD
         ########## End of Door Buttons ######################
 
         ########## Webcam images ##########
+=======
+        # add a text label with status
+
+        ### Webcam images
+        # frame = ttk.Frame(self, width=600, height=400)
+        # frame.pack()
+        # frame.place(x=400,y=100)#anchor='center', relx=0.5, rely=0.5)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
         # these are fake button that have the images for the outside and inside cameras that will refresh
         # to whatever the last created file is in the folder
 
+<<<<<<< HEAD
         # this is a method that finds the inside camera imaged adn then puts the on to the gui window as a button
         def inside_images(file_path_in):
             # gets the last image in the file based on time
@@ -277,6 +353,31 @@ class StartPage(tk.Frame):
             list_out_files = glob.glob(file_path_out)
             file_out = max(list_out_files, key=os.path.getctime)
             # print(f"hey {file_out}")
+=======
+        def inside_images(file_path_in):
+            list_in_files = glob.glob(file_path_in)
+            file_in = max(list_in_files, key=os.path.getctime)
+            #print(f"hey {file_out}")
+            img_in = Image.open(file_in).resize((550, 350))
+            self.image_in = ImageTk.PhotoImage(img_in)
+
+            inside_but = tk.Button(self, text='Click Me !', image=self.image_in)
+            inside_but.place(x=350, y=25)
+            ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
+            canvas.after(50000,inside_images, file_path_in)
+
+        inside_images(INCAMDIR + '*')
+
+        def open_indoor_folder():
+            os.startfile(INCAMDIR)
+        ttk.Button(self, text="Indoor filepath", command=open_indoor_folder).place(x=700, y=400,height=50, width=150)
+        # putting the grid in its place by using
+        # grid
+        def outside_images(file_path_out):
+            list_out_files = glob.glob(file_path_out)
+            file_out = max(list_out_files, key=os.path.getctime)
+            #print(f"hey {file_out}")
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
             img_out = Image.open(file_out)
 
             img_out = img_out.resize((550, 350))
@@ -286,16 +387,49 @@ class StartPage(tk.Frame):
             outside_but = tk.Button(self, text='Click Me !', image=self.image_out)
             outside_but.place(x=925, y=25)
             ttk.Label(self, text=str(os.path.basename(file_out)), font=SmFONT).place(x=950, y=400)
+<<<<<<< HEAD
             canvas.after(refresh_rate, outside_images, file_path_out)
+=======
+            canvas.after(50000,outside_images, file_path_out)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
         outside_images(OUTCAMDIR + '*')
 
         def open_outdoor_folder():
+<<<<<<< HEAD
             open_file(OUTCAMDIR)
 
         ttk.Button(self, text="Outdoor filepath", command=open_outdoor_folder).place(x=1325, y=400, height=50,
                                                                                      width=150)
         ##########  End of Camera images ##########
+=======
+            os.startfile(OUTCAMDIR)
+
+        ttk.Button(self, text="Outdoor filepath", command=open_outdoor_folder).place(x=1325, y=400, height=50, width=150)
+
+
+        # self.image1 = ImageTk.PhotoImage(file="STScI-01G8KCAK75G2JPGHNC40PVTA1R.png")
+
+        # tk.Button(self, text='Click Me !', image=self.image1).place(x=300, y=25)
+
+        ########  Camera Buttons ##########
+        '''
+        def inside_image():
+            self.image = ImageTk.PhotoImage(file='C:/Users/Ginkl/Documents/TrintyWork/Cams/OUt/20221019205435_IN_355.jpg')
+            tk.Button(self, text='Click Me !', image=self.image).place(x=800, y=25)
+        def outside_image():
+            self.image = ImageTk.PhotoImage(file="STScI-01G8KCAK75G2JPGHNC40PVTA1R.png")
+            tk.Button(self, text='Click Me !', image=self.image).place(x=800, y=25)
+        def alternate_image():
+            pass
+        door_cam_button = ttk.Button(self, text="Door View Only", command=inside_image)
+        door_cam_button.place(x=925, y=475, height=50, width=150)
+        out_cam_button = ttk.Button(self, text="Outside View Only", command=outside_image)
+        out_cam_button.place(x=1125, y=475, height=50, width=150)
+        alt_cam_button = ttk.Button(self, text="Alternate Images", command=alternate_image)
+        alt_cam_button.place(x=1325, y=475, height=50, width=150)
+        '''
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
         ##### Weather Section ########
         weather_title = tk.Label(self, text="Weather Data", font=MedFONT)
@@ -306,9 +440,15 @@ class StartPage(tk.Frame):
 
         ##### Labels for the weather section ##########
         tk.Label(self, text="Temperature Current:", font=SmFONT).place(x=925, y=635)
+<<<<<<< HEAD
         # tk.Label(self, text="Temperature Avg (1h):", font=SmFONT).place(x=925, y=605)
         tk.Label(self, text="Wind Speed Current:", font=SmFONT).place(x=925, y=665)
         # tk.Label(self, text="Wind Speed Avg (1h):", font=SmFONT).place(x=925, y=665)
+=======
+        #tk.Label(self, text="Temperature Avg (1h):", font=SmFONT).place(x=925, y=605)
+        tk.Label(self, text="Wind Speed Current:", font=SmFONT).place(x=925, y=665)
+        #tk.Label(self, text="Wind Speed Avg (1h):", font=SmFONT).place(x=925, y=665)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
         tk.Label(self, text="Humidity Current:", font=SmFONT).place(x=925, y=695)
         tk.Label(self, text="Pressure Current:", font=SmFONT).place(x=925, y=725)
         tk.Label(self, text="Wind Direction:", font=SmFONT).place(x=925, y=755)
@@ -320,6 +460,7 @@ class StartPage(tk.Frame):
 
         ####### Updating Labels from the weather station ###############
 
+<<<<<<< HEAD
         list_of_files = glob.glob(WXDIR + '*_*')  # * means all if need specific format then *.csv
         latest_file = min(list_of_files, key=os.path.getctime)  # gets the latest weather data file
         weather_data_location = latest_file
@@ -334,6 +475,68 @@ class StartPage(tk.Frame):
             # makes the plots of the wanted weather data
             def save_plot_png(all_data):
                 # creates arrays to hold all the data (blank)
+=======
+        # putting the button in its place by
+        # using grid
+        # button1.grid(row=1, column=1, padx=10, pady=10)
+
+        ## button to show frame 2 with text layout2
+        #button2 = ttk.Button(self, text="Page 2",
+        #                     command=lambda: controller.show_frame(Page2))
+        #button2.grid(row=2, column=1, padx=10, pady=10)
+
+
+        #weather_data_location = 'weatherdata.txt'
+
+        list_of_files = glob.glob(WXDIR + '*_*')  # * means all if need specific format then *.csv
+        latest_file = max(list_of_files, key=os.path.getctime)
+        weather_data_location = latest_file
+        print(latest_file)
+        def make_plots_and_labels(file):
+
+            def weather_data(file):
+                obs_col_names = (
+                    "Node", "RelativeWindDirection", "RelativeWindSpeed", "CorrectedWindDirection",
+                    "AverageRelativeWindDirection",
+                    "AverageRelativeWindSpeed", "RelativeGustDirection", "RelativeGustSpeed",
+                    "AverageCorrectedWindDirection",
+                    "WindSensorStatus", "Pressure", "Pressure at Sea level", "Pressure at Station", "Relative Humidity",
+                    "Temperature",
+                    "Dewpoint",
+                    "Absolute Humidity", "compassHeading", "WindChill", "HeatIndex", "AirDensity", "WetBulbTempature",
+                    "SunRiseTime", "SolarNoonTime", "SunsetTime",
+                    "Position of the Sun", "Twilight (Civil)",
+                    "Twilight (Nautical)",
+                    "Twilight (Astronomical)", "X-Tilt", "Y-Tilt", "Z-Orientation", "User Information Field",
+                    "System Date and Time",
+                    "Supply Voltage", "Status", "Checksum")
+
+                obs_col_pos = (
+                    0, 3, 7, 14, 18, 22, 29, 33, 40, 44, 49, 56, 63, 70, 74, 81, 88, 94, 98, 100, 104, 108, 115, 121,
+                    127, 133,
+                    141,
+                    147, 153, 159, 163, 167, 170, 171, 193, 199, 204)
+                #obsres = ascii.read(file, format='fixed_width_no_header', data_start=0, col_starts=obs_col_pos, names=obs_col_names)
+                obsres = ascii.read(file, format='no_header', data_start=0, delimiter=',',names=obs_col_names)
+
+                # return obsres
+                #print(obsres)
+
+                #with open('check.txt', 'w') as filehandle:
+                #    for listitem in obsres:
+                 #       filehandle.write('%s\n' % listitem)
+
+                output_array = np.array(obsres)
+                for i in range(len(output_array)):
+                    for j in range(len(output_array[0])):
+                        output_array[i][j] = ''.join(str(output_array[i][j]).split(','))
+                return output_array
+
+            all_data = weather_data(file)
+
+            # print(all_data)
+            def save_plot_png(all_data):
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                 size = len(all_data)
                 wind_direction = [0] * size
                 date_n_time = [0] * size
@@ -344,7 +547,10 @@ class StartPage(tk.Frame):
                 dew_point = [0] * size
                 pressure = [0] * size
 
+<<<<<<< HEAD
                 # arrays are loaded with data
+=======
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                 for i in range(len(all_data)):
                     tempature[i] = float(all_data[i][14])
                     wind_speed[i] = float(all_data[i][2])
@@ -356,18 +562,28 @@ class StartPage(tk.Frame):
                     temp = str(date_n_time[i])
                     date[i] = datetime.datetime.strptime(temp[:19], "%Y-%m-%dT%H:%M:%S")
 
+<<<<<<< HEAD
                 # print(date)
                 # a def to make the plot format for each weather plot
 
                 def plot_format(x, y, xlabel, ylabel, title, color, fig, thick=1):
 
                     plt.plot(x, y, c=color, linewidth=thick)
+=======
+                #print(date)
+
+                def plot_format(x, y, xlabel, ylabel, title, color,fig,thick=1):
+
+
+                    plt.plot(x, y, c=color,linewidth=thick)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                     plt.title(title)
                     plt.xlabel(xlabel)
                     plt.ylabel(ylabel)
                     plt.xticks(rotation=25)
 
                     try:
+<<<<<<< HEAD
                         os.mkdir(
                             f'{HOMEDIR}weather_plots')  # makes a folder to hold all the weather plots if it is not present
                     except:
@@ -408,6 +624,43 @@ class StartPage(tk.Frame):
 
             # makes the labels
             def create_labels():
+=======
+                        os.mkdir(f'{HOMEDIR}weather_plots')
+                    except:
+                        pass
+                    fig.canvas.draw()
+                    plt.savefig(f'{HOMEDIR}weather_plots/{title}.png')
+                    fig.clear()
+                    # FIx so not to many figures will be made
+
+
+                plot_format(date, wind_direction, 'Date', 'Wind Direction (Degrees)', 'Wind_direction_over_time',
+                            'green',fig,thick=0.1)
+                plot_format(date, tempature, 'Date', 'Temperature (Degrees)', 'Temperature', 'red',fig)
+                plot_format(date, humidity, 'Date', 'Humidity (Percent)', 'Humidity', 'blue',fig)
+                plot_format(date, wind_speed, 'Date', 'Wind Speed (m/s)', 'Wind_speed', 'purple',fig,thick=0.1)
+                plot_format(date, dew_point, 'Date', 'Dew Point (Degrees)', 'Dewpoint', 'orange',fig)
+                plot_format(date, pressure, 'Date', 'Pressure (hPa)', 'Pressure', 'pink',fig)
+
+
+            save_plot_png(all_data)
+
+            def create_labels():
+                # updating variables
+
+                tempature = float(all_data[-1][14])
+                wind_speed = float(all_data[-1][2])
+                humidity = float(all_data[-1][13])
+                dew_point = float(all_data[-1][15])
+                pressure = float(all_data[-1][12])
+                wind_direction = int(all_data[-1][1])
+                date_n_time = all_data[-1][33]
+                sun_rise = str(all_data[-1][22])
+                sun_set = str(all_data[-1][24])
+                civil_twi = str(all_data[-1][26])
+                astro_twi = str(all_data[-1][28])
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                 date = datetime.datetime.strptime(date_n_time[:19], "%Y-%m-%dT%H:%M:%S")
 
                 tk.Label(self, text=f'{tempature}', font=SmFONT).place(x=1300, y=635)
@@ -424,6 +677,7 @@ class StartPage(tk.Frame):
                 tk.Label(self, text=f'{astro_twi}', font=SmFONT).place(x=1300, y=905)
 
             create_labels()
+<<<<<<< HEAD
 
             ################### Wind direction arrows #################
             # def to make the angle and all the other information on the plot
@@ -530,6 +784,12 @@ class StartPage(tk.Frame):
         except:
             print('unable to take screenshot')
         canvas.after(refresh_rate, take_screen_capture)
+=======
+            canvas.after(50000, make_plots_and_labels, weather_data_location)
+
+        fig = plt.figure()
+        make_plots_and_labels(weather_data_location)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
 
 # second window frame page1
@@ -539,17 +799,33 @@ class Page1(tk.Frame):
         tk.Frame.__init__(self, parent)
         canvas = tk.Canvas()
 
+<<<<<<< HEAD
         label = ttk.Label(self, text="Weather Data Plots", font=LARGEFONT)
         label.place(x=25, y=25)
 
         # button to show frame 2 with text
         # layout2
         button1 = ttk.Button(self, text="Main Page",
+=======
+
+
+
+        label = ttk.Label(self, text="Weather Data Plots", font=LARGEFONT)
+        label.place(x=25,y=25)
+
+        # button to show frame 2 with text
+        # layout2
+        button1 = ttk.Button(self, text="StartPage",
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                              command=lambda: controller.show_frame(StartPage))
 
         # putting the button in its place
         # by using grid
+<<<<<<< HEAD
         button1.place(x=100, y=450, height=50, width=175)
+=======
+        button1.place(x=100, y=450, height=50, width=150)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
         # button to show frame 2 with text
         # layout2
@@ -558,6 +834,7 @@ class Page1(tk.Frame):
 
         # putting the button in its place by
         # using grid
+<<<<<<< HEAD
         button2.place(x=100, y=500, height=50, width=175)
 
         #################### Searching weather data files ###################################
@@ -565,6 +842,12 @@ class Page1(tk.Frame):
         # do not know how to fix
 
         # creates the pop up window for searching past weather data files
+=======
+        button2.place(x=100, y=500, height=50, width=150)
+
+
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
         def open_popup():
             top = tk.Toplevel(self)
             top.geometry("750x250")
@@ -573,6 +856,7 @@ class Page1(tk.Frame):
             tk.Label(top, text="Ex. YxxxMxDx").place(x=25, y=50)
 
             e = tk.Entry(top)
+<<<<<<< HEAD
             e.place(x=25, y=75)
 
             def get_info():
@@ -681,6 +965,41 @@ class Page1(tk.Frame):
 
             # list_in_files = glob.glob(file_path_in)
             # file_in = max(list_in_files, key=os.path.getctime)
+=======
+            e.place(x=25,y=75)
+
+            def get_info():
+                v = e.get()
+                string_to_update=tk.StringVar()
+                input_label= tk.Label(top, textvariable=string_to_update,fg='red').place(x=25,y=125)
+
+                if len(v)==8 and v.isdigit()==True:
+                    string_to_update.set("")
+
+                    old_data=weather_plots(f'weather_{v}.txt')
+                    # make the plots
+                    # -update how the save location is determined
+                    # make a folder in the weather plots folder
+                    # call function to make the same plots to a folder and open the folder so it can be viewed
+                else:
+                    string_to_update.set("nay")
+                    #tk.Label(top, text="Please make a valid input",fg='red').place(x=25, y=125)
+                return print(v)
+            tk.Button(top, text='Ok', command=get_info).place(x=25,y=100)
+
+
+        # TO DO
+        button3 = ttk.Button(self,text= "Weather Data Search",command=open_popup)
+        button3.place(x=100, y=550, height=50, width=150)
+
+
+
+
+
+        def weather_plots(file_path_in):
+            #list_in_files = glob.glob(file_path_in)
+            #file_in = max(list_in_files, key=os.path.getctime)
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
             # print(f"hey {file_out}")
             # ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
             plot_1 = Image.open(f'{file_path_in}Dewpoint_over_time.png').resize((550, 350))
@@ -699,6 +1018,7 @@ class Page1(tk.Frame):
             self.plot_4 = ImageTk.PhotoImage(plot_4)
             tk.Button(self, text='Click Me !', image=self.plot_4).place(x=925, y=500)
 
+<<<<<<< HEAD
             # plot_5 = Image.open(f'{file_path_in}Wind_speed_over_time.png').resize((550, 350))
             # self.plot_5 = ImageTk.PhotoImage(plot_5)
             # tk.Button(self, text='Click Me !', image=self.plot_5).place(x=950, y=775)
@@ -713,6 +1033,21 @@ class Page1(tk.Frame):
         ttk.Button(self, text="Weather Plots File Path", command=weather_plots_folder).place(x=100, y=400, height=50,
                                                                                              width=175)
         # button to the weather plots path
+=======
+            #plot_5 = Image.open(f'{file_path_in}Wind_speed_over_time.png').resize((550, 350))
+            #self.plot_5 = ImageTk.PhotoImage(plot_5)
+            #tk.Button(self, text='Click Me !', image=self.plot_5).place(x=950, y=775)
+
+            canvas.after(50000, weather_plots, file_path_in)
+
+        weather_plots(f"{HOMEDIR}weather_plots/")
+
+        def weather_plots_folder():
+            os.startfile(f'{HOMEDIR}weather_plots/')
+
+        ttk.Button(self, text="Weather Plots File Path", command=weather_plots_folder).place(x=100, y=400, height=50, width=150)
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
 
 # third window frame page2
@@ -730,15 +1065,24 @@ class Page2(tk.Frame):
 
         # putting the button in its place by
         # using grid
+<<<<<<< HEAD
         button1.place(x=100, y=450, height=50, width=175)
 
         # button to show frame 3 with text
         # layout3
         button2 = ttk.Button(self, text="Main Page",
+=======
+        button1.place(x=100, y=450, height=50, width=150)
+
+        # button to show frame 3 with text
+        # layout3
+        button2 = ttk.Button(self, text="Startpage",
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
                              command=lambda: controller.show_frame(StartPage))
 
         # putting the button in its place by
         # using grid
+<<<<<<< HEAD
         button2.place(x=100, y=400, height=50, width=175)
 
         # puts the weather plots on the extra weather plots page
@@ -748,6 +1092,17 @@ class Page2(tk.Frame):
             # print(f"hey {file_out}")
             # ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
 
+=======
+        button2.place(x=100, y=400, height=50, width=150)
+
+        def weather_plots(file_path_in):
+            #list_in_files = glob.glob(file_path_in)
+            #file_in = max(list_in_files, key=os.path.getctime)
+            # print(f"hey {file_out}")
+            # ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
+
+
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
             plot_1 = Image.open(f'{file_path_in}Wind_speed_over_time.png').resize((550, 350))
             self.plot_1 = ImageTk.PhotoImage(plot_1)
             tk.Button(self, text='Click Me !', image=self.plot_1).place(x=325, y=125)
@@ -764,6 +1119,7 @@ class Page2(tk.Frame):
             self.plot_4 = ImageTk.PhotoImage(plot_4)
             tk.Button(self, text='Click Me !', image=self.plot_4).place(x=925, y=500)
             '''
+<<<<<<< HEAD
             canvas.after(refresh_rate, weather_plots, file_path_in)
 
         weather_plots(WPDIR)
@@ -774,11 +1130,27 @@ class Page2(tk.Frame):
 
 def door_control(DIR):
     os.system('ssh {0}@{1} -- "./uswitch.py -dir {2}"'.format(USER-NAME,REMOTE-HOST,DIR))
+=======
+            canvas.after(50000, weather_plots, file_path_in)
+
+        weather_plots(f"{HOMEDIR}weather_plots/")
+
+        def weather_plots_folder():
+            os.startfile(f'{HOMEDIR}weather_plots/')
+
+def door_control(DIR):
+    os.system('ssh {0}@{1} -- "./uswitch.py -dir {2}"'.format(USER-NAME,REMOTE-HOST,DIR)) 
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
 
 # Driver Code
 if __name__ == "__main__":
     app = tkinterApp()
+<<<<<<< HEAD
     app.geometry('1500x1000') # size of the gui displayed to the user
     app.title("Trinity GUI")
 
+=======
+    app.geometry('1500x1000')
+    app.title("Trinity GUI")
+>>>>>>> 0d6026a2c9e0be8bd89a40d24493c31f8b6ca72e
     app.mainloop()
