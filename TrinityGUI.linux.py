@@ -38,7 +38,6 @@ import numpy as np
 import pickle
 import subprocess
 import pexpect
-import asyncio
 #######################################################
 ################## User File paths ####################
 
@@ -133,7 +132,7 @@ class tkinterApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (StartPage,Page1,Page2):
+        for F in (StartPage,WeatherPage,WeatherPage2,RunPage):
             frame = F(container, self)
 
             # initializing frame of that object from
@@ -214,20 +213,24 @@ class StartPage(tk.Frame):
 
         # created the actual buttons that wil be displayed
         door_o_button = ttk.Button(self, text="Open Pod Door", command=door_open)
-        door_o_button.place(x=25, y=125, height=50, width=150)
+        door_o_button.place(x=25, y=225, height=50, width=150)
 
         door_c_button = ttk.Button(self, text="Close Pod Door", command=door_close)
-        door_c_button.place(x=25, y=225, height=50, width=150)
+        door_c_button.place(x=25, y=325, height=50, width=150)
 
-        door_status_button = ttk.Button(self, text="Check Status", command=random_status)
-        door_status_button.place(x=25, y=325, height=50, width=150)
+        door_status_button = ttk.Button(self, text="Update Images", command=random_status)
+        door_status_button.place(x=25, y=425, height=50, width=150)
 
         ########## End of Door Buttons ######################
+        #####################################################
+        ########## Take you to Run Page #####################
+        runpage = ttk.Button(self, text="Run Page", command=lambda: controller.show_frame(RunPage))
+        runpage.place(x=25, y=125, height=50, width=150)
         #####################################################
         ########## Outlet Control ###########################
         
         outlet_button = ttk.Button(self, text="Outlet Control", command=random_status)
-        outlet_button.place(x=25, y=425, height=50, width=150)
+        outlet_button.place(x=25, y=525, height=50, width=150)
         
         ########## Webcam images ##########
 
@@ -237,7 +240,7 @@ class StartPage(tk.Frame):
         # this is a method that finds the inside camera imaged adn then puts the on to the gui window as a button
         def inside_images(file_path_in):
             cmd = f"{BINDIR}/update_cam.py INCAM {CAMDIR}"
-            subprocess.run(cmd.split())
+            subprocess.Popen(cmd.split())
             file_in = f'{CAMDIR}/INCAM.jpg'
             try:
                 # resize the image
@@ -292,11 +295,14 @@ class StartPage(tk.Frame):
         ##########  End of Camera images ##########
         
         ##### Weather Section ########
-        weather_title = tk.Label(self, text="Weather Data", font=MedFONT)
+        weather_title = tk.Label(self, text="Current Weather Data", font=MedFONT)
         weather_title.place(x=925, y=525)
 
-        weather_button = ttk.Button(self, text="More Weather Data", command=lambda: controller.show_frame(Page1))
-        weather_button.place(x=1325, y=525, height=50, width=150)
+        weather_title = tk.Label(self, text="Wind Plot", font=MedFONT)
+        weather_title.place(x=525, y=525)
+
+        weather_button = ttk.Button(self, text="Weather Data Plots", command=lambda: controller.show_frame(WeatherPage))
+        weather_button.place(x=25, y=625, height=50, width=150)
 
         ##### Labels for the weather section ##########
         # tk.Label(self, text="Temperature Current:", font=SmFONT).place(x=925, y=635)
@@ -319,11 +325,9 @@ class StartPage(tk.Frame):
             cmd = f'{BINDIR}/update_wx.py {PORT} {PHYS_USR} {PHYS_PASS} {LWXDIR} {WXDIR}'
             subprocess.Popen(cmd.split(),
                              stdout=subprocess.PIPE, 
-                             stderr=subprocess.PIPE,
-                             shell=True)
+                             stderr=subprocess.PIPE)
 
-        if len(list_of_files)==0:
-            update_wx_files()
+        update_wx_files()
                 
         latest_file = max(list_of_files, key=os.path.getctime)  # gets the latest weather data file
         weather_data_location = latest_file
@@ -413,35 +417,21 @@ class StartPage(tk.Frame):
 
             # makes the labels
             def create_labels():
-                # date = datetime.datetime.strptime(date_n_time[:19], "%Y-%m-%dT%H:%M:%S")
-                #
-                # tk.Label(self, text=f'{tempature}', font=SmFONT).place(x=1300, y=635)
-                # # tk.Label(self, text="Temperature Avg (1h):", font=SmFONT).place(x=925, y=605)
-                # tk.Label(self, text=f'{wind_speed}', font=SmFONT).place(x=1300, y=665)
-                # # tk.Label(self, text="Wind Speed Avg (1h):", font=SmFONT).place(x=925, y=665)
-                # tk.Label(self, text=f'{humidity}', font=SmFONT).place(x=1300, y=695)
-                # tk.Label(self, text=f'{pressure}', font=SmFONT).place(x=1300, y=725)
-                # tk.Label(self, text=f'{wind_direction}', font=SmFONT).place(x=1300, y=755)
-                # tk.Label(self, text=f'{dew_point}', font=SmFONT).place(x=1300, y=785)
-                # tk.Label(self, text=f'{sun_rise}', font=SmFONT).place(x=1300, y=815)
-                # tk.Label(self, text=f'{sun_set}', font=SmFONT).place(x=1300, y=845)
-                # tk.Label(self, text=f'{civil_twi}', font=SmFONT).place(x=1300, y=875)
-                # tk.Label(self, text=f'{astro_twi}', font=SmFONT).place(x=1300, y=905)
                 plt.figure(figsize=(7, 6))
                 x = np.arange(-10, 10, 0.01)
                 y = x ** 2
 
                 weather_label_text = f'''
-Temperature:     {tempature}{chr(176)}C\n \
+Temperature:       {tempature}{chr(176)}C\n \
 Wind Speed:       {wind_speed} m/s\n \
-Humidity:           {humidity}%\n \
-Pressure:            {pressure}\n \
-Wind Direction:       {wind_direction}{chr(176)}(N of E)\n \
-Dew Point                      {dew_point}{chr(176)}C\n \
-Sunrise:                          {sun_rise}Z\n \
-Sunset:                           {sun_set}Z\n \
-Civil Twilight:                  {civil_twi}Z\n \
-Astro Twilight:                 {astro_twi}Z\n''' 
+Humidity:            {humidity}%\n \
+Pressure:             {pressure}\n \
+Wind Direction:   {wind_direction}{chr(176)}(N of E)\n \
+Dew Point           {dew_point}{chr(176)}C\n \
+Sunrise:               {sun_rise}Z\n \
+Sunset:                {sun_set}Z\n \
+Civil Twilight:        {civil_twi}Z\n \
+Astro Twilight:       {astro_twi}Z\n''' 
                 # adding text inside the plot
                 plt.text(-10, 0, weather_label_text , fontsize=24)
 
@@ -560,29 +550,18 @@ Astro Twilight:                 {astro_twi}Z\n'''
                 canvas.after(refresh_rate, arrow_image)
 
             arrow_image()
-
+            print('New Weather Plot')
             canvas.after(refresh_rate, make_plots_and_labels, weather_data_location) # refreshs the system after some time
 
         #################### End of Wind direction arrows ###################################
 
         make_plots_and_labels(weather_data_location) # Rund the plots and labels
 
-        # the screeenshot has been removed as a graph would be better
-        # # takes a screenshot of part of the screen NO SET CORRECTLY AS IT WILL BE DIFFERENT ON THE GATECH COMPUTER
-        # # JUST NEEDS TO BE PLAYEd WITH
-        # def take_screen_capture():
-        #     im = ImageGrab.grab(bbox=(400, 200, 1000, 1000))
-        #
-        #     im.save('Weather_readout_screenshot.png')
-        #
-        # try:
-        #     take_screen_capture()
-        # except:
-        #     print('unable to take screenshot')
-        # canvas.after(refresh_rate, take_screen_capture)
 
-# second window frame page1
-class Page1(tk.Frame):
+###################################################
+##### SECOND WINDOW ###############################
+###################################################
+class WeatherPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -603,7 +582,7 @@ class Page1(tk.Frame):
         # button to show frame 2 with text
         # layout2
         button2 = ttk.Button(self, text=" More Weather Plots",
-                             command=lambda: controller.show_frame(Page2))
+                             command=lambda: controller.show_frame(WeatherPage2))
 
         # putting the button in its place by
         # using grid
@@ -704,14 +683,6 @@ class Page1(tk.Frame):
 
                     string_to_update.set("Graphs Complete")
                     open_file(DATEDIR)
-
-                    # -update how the save location is determined
-                    # make a folder in the weather plots folder
-                    # call function to make the same plots to a folder and open the folder so it can be viewed
-
-                # elif len(v) == 8 and v[0] != 2 or v[2] > 2 or v[4] > 3:
-                # string_to_update.set("Not a valid date")
-
                 else:
                     string_to_update.set(
                         "Not a valid input or no file with that date is found")  # displays to the user when the file is not found
@@ -727,11 +698,6 @@ class Page1(tk.Frame):
 
         # places the weather plots on the weather plots page
         def weather_plots(file_path_in):
-
-            # list_in_files = glob.glob(file_path_in)
-            # file_in = max(list_in_files, key=os.path.getctime)
-            # print(f"hey {file_out}")
-            # ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
             plot_1 = Image.open(f'{file_path_in}Dewpoint_over_time.png').resize((550, 350))
             self.plot_1 = ImageTk.PhotoImage(plot_1)
             tk.Button(self, text='Click Me !', image=self.plot_1).place(x=325, y=125)
@@ -748,10 +714,6 @@ class Page1(tk.Frame):
             self.plot_4 = ImageTk.PhotoImage(plot_4)
             tk.Button(self, text='Click Me !', image=self.plot_4).place(x=925, y=500)
 
-            # plot_5 = Image.open(f'{file_path_in}Wind_speed_over_time.png').resize((550, 350))
-            # self.plot_5 = ImageTk.PhotoImage(plot_5)
-            # tk.Button(self, text='Click Me !', image=self.plot_5).place(x=950, y=775)
-
             canvas.after(refresh_rate, weather_plots, file_path_in)  # refreshes after some time
 
         weather_plots(WPDIR)  # runs the weather plots
@@ -763,7 +725,7 @@ class Page1(tk.Frame):
                                                                                              width=150)
         
 # third window frame page2
-class Page2(tk.Frame):
+class WeatherPage2(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         canvas = tk.Canvas()
@@ -773,7 +735,7 @@ class Page2(tk.Frame):
         # button to show frame 2 with text
         # layout2
         button1 = ttk.Button(self, text="Weather Data Plot 1",
-                             command=lambda: controller.show_frame(Page1))
+                             command=lambda: controller.show_frame(WeatherPage))
 
         # putting the button in its place by
         # using grid
@@ -817,6 +779,138 @@ class Page2(tk.Frame):
 
         def weather_plots_folder():
             open_file(WPDIR)
+
+class RunPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.canvas = tk.Canvas()
+
+        label = ttk.Label(self, text="Run Page", font=LARGEFONT)
+        label.place(x=25, y=25)
+
+        # button to show frame 2 with text
+        # layout2
+        start = ttk.Button(self, text="Start Page",
+                             command=lambda: controller.show_frame(StartPage))
+
+        # putting the button in its place
+        # by using grid
+        start.place(x=25, y=125, height=50, width=150)
+
+        # button to show frame 2 with text
+        # layout2
+        weather = ttk.Button(self, text="Weather Data Plots",
+                             command=lambda: controller.show_frame(WeatherPage2))
+
+        # putting the button in its place by
+        # using grid
+        weather.place(x=25, y=500, height=50, width=150)
+
+        #################################################################
+        ###### List of things that need to happen to make run happen ####
+        # Placing a Listbox that has all the steps
+        self.listbox = tk.Listbox(self,
+                             bg = "grey",
+                             height = 20, # number of lines
+                             width = 50,  # number of characters
+                             activestyle = 'dotbox',
+                             font = MedFONT,
+                             fg = "yellow")
+        self.listbox.place(x=250, y=125)
+        steps = ["Turn on CT CPU",
+                 "Turn on chiller",
+                 "Turn on HV",
+                 "Check Weather",
+                 "Open Pod bay door",
+                 "Flasher data",
+                 "Start night-sky data",
+                 "Stop night-sky data",
+                 "Close Pod pay door",
+                 "Flasher data",
+                 "Turn off HV",
+                 "Turn off chiller",
+                 "Turn off CT CPU"]
+        for step in steps:
+            self.listbox.insert(tk.END,step)
+
+        # Set the initial selection to the first item
+        self.index = 0
+        self.listbox.select_set(self.index)
+
+        # Set paused state
+        self.paused = False
+
+        self.listbox.bind('<<ListboxSelect>>',self.on_select)
+
+        # Create Start Button
+        start_button = tk.Button(self,text="Start",command=self.start_execution)
+        start_button.place(x=350,y=75)
+        
+        # Create Pause Button
+        pause_button = tk.Button(self,text="Pause",command=self.pause_execution)
+        pause_button.place(x=400,y=75)
+
+        # Create an output box
+        self.output_text = tk.Text(self,
+                                   height = 21,
+                                   width = 40,
+                                   font = MedFONT)
+        self.output_text.place(x=750,y=115)
+
+    def on_select(self,event):
+        # Get the selected item from the Listbox
+        selected_item = self.listbox.get(self.listbox.curselection())
+        
+        # Set the index to what is selected
+        self.index = int(self.listbox.curselection()[0])
+        print("Index: ",self.index)
+        print("Selected Item: ", selected_item)
+
+    def start_execution(self):
+        # Start the execution from the selected item
+        self.paused = False
+        if self.index < self.listbox.size() - 1:
+            self.canvas.after(1000, self.select_next_item)
+
+
+    def select_next_item(self):
+        # Select the current item in the Listbox
+        self.listbox.select_clear(0,tk.END)
+        self.listbox.selection_set(self.index)
+        
+        # Check if there are more items to process
+        if self.index < self.listbox.size() - 1:
+            #Check if execution is paused
+            if not self.paused:
+                # Get the selected item from the Listbox
+                selected_item = self.listbox.get(self.listbox.curselection())
+                
+                # Perform the desired action for the selected item
+                self.output_text.insert(tk.END, f"Executing step for {selected_item}...\n")
+                self.output_text.see("end")
+                
+                # Move to the next item after a delay of 1 second
+                # to be replaced later with commands to be executed
+                print("stuff is happening...")
+
+                # Move on to the next index in 1 second
+                self.index += 1
+                self.canvas.after(1000, self.select_next_item)
+            else:
+                self.output_text.insert(tk.END,"Execution paused.\n")
+                self.output_text.see("end")
+        else:
+            self.output_text.insert(tk.END,"Execution compledted.\n")
+            self.output_text.see("end")
+
+    def pause_execution(self):
+        # Toggle the paused state
+        self.paused = not self.paused
+        if not self.paused:
+            # Resume the eecution
+            self.select_next_item()
+        
+        
         
 #########################################################################
 ######################## Random Functions ###############################
@@ -861,7 +955,9 @@ def open_file(filename):
     else:
         opener = "open" if sys.platform == "darwin" else "xdg-open"
         subprocess.call([opener, filename])
-        
+
+# This function is used to read an SSH tunnel to the lab computer.
+# This way the GUI can be used anywhere provided you have GT creds.
 def create_tunnel():
     print(f"Creating SSH Tunnel to {PHYS_HOST} on port {PORT}")
    
@@ -878,10 +974,7 @@ def create_tunnel():
         print("ssh: connect to host ssh.physics.gatech.edu port 22: Connection refused")
         print("Please try again in a couple minutes.")
         sys.exit(1)
-    return ssh
-
-def get_files():
-    rsync_cmd = 'rsync -Pau'
+    return ssh     
 
 # Driver Code
 if __name__ == "__main__":
