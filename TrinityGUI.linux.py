@@ -132,7 +132,7 @@ class tkinterApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (StartPage,WeatherPage,WeatherPage2,RunPage):
+        for F in (StartPage,WeatherPage,WeatherPage2,RunPage,OutletPage):
             frame = F(container, self)
 
             # initializing frame of that object from
@@ -176,40 +176,8 @@ class StartPage(tk.Frame):
 
             Door_message.config(text=statement)  # gets the label ready
 
-            Door_message.place(x=25,
-                               y=375)  # place the button, place is used through out pack and place can not be used together
+            Door_message.place(x=25,y=375)  # place the button, place is used through out pack and place can not be used together
             Door_message.after(5000, Door_message.destroy)  # removed the messages after a set time frame
-
-        # door open label
-        def door_open():
-            this_b = tk.Label(self, text='Opening Pod Bay Door')
-            this_b.place(x=75, y=175)
-            this_b.after(12000, this_b.destroy)
-            cmd = f'ssh {PHYS_USR}@127.0.0.1 -p {PORT} \"/home/mpotts32/bin/uswitch up {CTRL_PASS}\"'
-            print(cmd)
-            c = pexpect.spawn(cmd)
-            # Expect the password prompt and send the password
-            c.expect('password:')
-            c.sendline(PHYS_PASS)
-            print(c.read().decode('UTF-8'))
-            c.expect('$')
-            c.close()
-            
-            
-        # door close label
-        def door_close():
-            this_b = tk.Label(self, text='Closing Pod Bay Door')
-            this_b.place(x=75, y=275)
-            this_b.after(12000, this_b.destroy)
-            cmd = f'ssh {PHYS_USR}@127.0.0.1 -p {PORT} \"/home/mpotts32/bin/uswitch down {CTRL_PASS}\"'
-            print(cmd)
-            c = pexpect.spawn(cmd)
-            # Expect the password prompt and send the password
-            c.expect('password:')
-            c.sendline(PHYS_PASS)
-            print(c.read().decode('UTF-8'))
-            c.expect('$')
-            c.close()
 
         # created the actual buttons that wil be displayed
         door_o_button = ttk.Button(self, text="Open Pod Door", command=door_open)
@@ -224,12 +192,14 @@ class StartPage(tk.Frame):
         ########## End of Door Buttons ######################
         #####################################################
         ########## Take you to Run Page #####################
+        
         runpage = ttk.Button(self, text="Run Page", command=lambda: controller.show_frame(RunPage))
         runpage.place(x=25, y=125, height=50, width=150)
+        
         #####################################################
         ########## Outlet Control ###########################
         
-        outlet_button = ttk.Button(self, text="Outlet Control", command=random_status)
+        outlet_button = ttk.Button(self, text="Outlet Control", command=lambda: controller.show_frame(OutletPage))
         outlet_button.place(x=25, y=525, height=50, width=150)
         
         ########## Webcam images ##########
@@ -304,29 +274,14 @@ class StartPage(tk.Frame):
         weather_button = ttk.Button(self, text="Weather Data Plots", command=lambda: controller.show_frame(WeatherPage))
         weather_button.place(x=25, y=625, height=50, width=150)
 
-        ##### Labels for the weather section ##########
-        # tk.Label(self, text="Temperature Current:", font=SmFONT).place(x=925, y=635)
-        # # tk.Label(self, text="Temperature Avg (1h):", font=SmFONT).place(x=925, y=605)
-        # tk.Label(self, text="Wind Speed Current:", font=SmFONT).place(x=925, y=665)
-        # # tk.Label(self, text="Wind Speed Avg (1h):", font=SmFONT).place(x=925, y=665)
-        # tk.Label(self, text="Humidity Current:", font=SmFONT).place(x=925, y=695)
-        # tk.Label(self, text="Pressure Current:", font=SmFONT).place(x=925, y=725)
-        # tk.Label(self, text="Wind Direction:", font=SmFONT).place(x=925, y=755)
-        # tk.Label(self, text="Dew Point", font=SmFONT).place(x=925, y=785)
-        # tk.Label(self, text="Sunrise:", font=SmFONT).place(x=925, y=815)
-        # tk.Label(self, text="Sunset:", font=SmFONT).place(x=925, y=845)
-        # tk.Label(self, text="Civil Twilight:", font=SmFONT).place(x=925, y=875)
-        # tk.Label(self, text="Astro Twilight:", font=SmFONT).place(x=925, y=905)
-
         ####### Updating Labels from the weather station ###############       
         
         list_of_files = glob.glob(WXDIR + '*_*')  # * means all if need specific format then *.csv
         def update_wx_files():
             cmd = f'{BINDIR}/update_wx.py {PORT} {PHYS_USR} {PHYS_PASS} {LWXDIR} {WXDIR}'
-            subprocess.Popen(cmd.split(),
-                             stdout=subprocess.PIPE, 
-                             stderr=subprocess.PIPE)
-
+            proc = subprocess.Popen(cmd.split(),
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.PIPE)
         update_wx_files()
                 
         latest_file = max(list_of_files, key=os.path.getctime)  # gets the latest weather data file
@@ -752,11 +707,6 @@ class WeatherPage2(tk.Frame):
 
         # puts the weather plots on the extra weather plots page
         def weather_plots(file_path_in):
-            # list_in_files = glob.glob(file_path_in)
-            # file_in = max(list_in_files, key=os.path.getctime)
-            # print(f"hey {file_out}")
-            # ttk.Label(self, text=str(os.path.basename(file_in)), font=SmFONT).place(x=350, y=400)
-
             plot_1 = Image.open(f'{file_path_in}Wind_speed_over_time.png').resize((550, 350))
             self.plot_1 = ImageTk.PhotoImage(plot_1)
             tk.Button(self, text='Click Me !', image=self.plot_1).place(x=325, y=125)
@@ -779,7 +729,11 @@ class WeatherPage2(tk.Frame):
 
         def weather_plots_folder():
             open_file(WPDIR)
-
+            
+#########################################################################
+######################### Run Page ######################################
+#########################################################################
+            
 class RunPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -810,24 +764,29 @@ class RunPage(tk.Frame):
         ###### List of things that need to happen to make run happen ####
         # Placing a Listbox that has all the steps
         self.listbox = tk.Listbox(self,
-                             bg = "grey",
-                             height = 20, # number of lines
-                             width = 50,  # number of characters
-                             activestyle = 'dotbox',
-                             font = MedFONT,
-                             fg = "yellow")
+                                  bg = "grey",
+                                  height = 20, # number of lines
+                                  width = 50,  # number of characters
+                                  activestyle = 'dotbox',
+                                  font = MedFONT,
+                                  fg = "yellow",
+                                  exportselection=False)
         self.listbox.place(x=250, y=125)
         steps = ["Turn on CT CPU",
+                 "Power on sysems",
+                 "Initialize Subsystems",
                  "Turn on chiller",
+                 "HV Scan",
                  "Turn on HV",
                  "Check Weather",
                  "Open Pod bay door",
-                 "Flasher data",
+                 "Enable Flasher",
+                 "Trigger Scan",
                  "Start night-sky data",
                  "Stop night-sky data",
                  "Close Pod pay door",
-                 "Flasher data",
                  "Turn off HV",
+                 "Power off systems",
                  "Turn off chiller",
                  "Turn off CT CPU"]
         for step in steps:
@@ -910,12 +869,126 @@ class RunPage(tk.Frame):
             # Resume the eecution
             self.select_next_item()
         
+#########################################################################
+######################### Outlet Page ###################################
+#########################################################################
+
+class OutletPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        canvas = tk.Canvas()
+
+        # Page title
+        label = ttk.Label(self, text="Outlet Control Page", font=LARGEFONT)
+        label.place(x=25, y=25)
+
+        # Button to take you back to the start page
+        start = ttk.Button(self, text="Start Page",command=lambda: controller.show_frame(StartPage))
+        start.place(x=25, y=125, height=50, width=150)
+
+        # Button to take you back to the Run page
+        start = ttk.Button(self, text="Run Page",command=lambda: controller.show_frame(RunPage))
+        start.place(x=25, y=225, height=50, width=150)
+
+        # Button to take you back to the Outlet page
+        start = ttk.Button(self, text="Outlet Page",command=lambda: controller.show_frame(OutletPage))
+        start.place(x=25, y=325, height=50, width=150)
         
+        # Button to take you to the weather plots page
+        weather = ttk.Button(self, text="Weather Data Plots",command=lambda: controller.show_frame(WeatherPage))
+        weather.place(x=25, y=425, height=50, width=150)
+
+        # Init buttons list
+        self.buttons = []
+
+        # Create the Wall cabinet frame with buttons
+        rec1 = tk.Frame(self, width=300, height=500, bg="gray")
+        rec1.place(x=225, y=125)
+        label1 = tk.Label(rec1, text=" Wall Cabinet ", font=MedFONT)
+        label1.pack(pady=10)
+
         
+        # Create the rolling cabinet frame with buttons
+        rec2 = tk.Frame(self, width=300, height=500, bg="gray")
+        rec2.place (x=525, y=125)
+        label2 = tk.Label(rec2, text="Rolling Cabinet", font=MedFONT)
+        label2.pack(pady=10)
+
+        # Create all the buttons
+        for rec in [rec1, rec2]:
+            for i in range(8):
+                if rec == rec1:    
+                    button = tk.Button(rec, text=f"Outlet {i+1}", bg="gray90", command=lambda lbl=i+1: self.button_click(lbl))
+                else:
+                    button = tk.Button(rec, text=f"Outlet {i+1}", bg="gray90", command=lambda lbl=i+9: self.button_click(lbl))
+                button.pack(pady=5)
+                self.buttons.append(button)
+
+        # Variable to keep track of if we are in reboot outlet mode
+        self.reboot = False
+                
+        # Create a check box that controls the whether to reboot the outlets or
+        # turn them off individually
+        self.var = tk.IntVar()
+        checkbox = tk.Checkbutton(self, text="Reboot Mode", variable=self.var, command=self.toggle_reboot)
+        checkbox.place(x=725, y=125)
+
+    def toggle_reboot(self):
+        if self.var.get()==1:
+            print("checked")
+            self.reboot = True
+        else:
+            print('unchecked')
+            self.reboot = False
+        print(self.reboot)
+            
+
+    def button_click(self, label):
+        print(self.reboot)
+        if self.reboot:
+            if self.buttons[label-1]["bg"] == "red":
+                self.buttons[label-1]["bg"] = "gray90" # Reset button color to default
+                print(' reverse stuff...')
+                self.buttons[label-1]['bg'] = 'red'
+            else:
+                self.buttons[label-1]["bg"] = "red" # Toggle button color to red
+                print('do stuff...')
+                self.buttons[label-1]['bg'] = "gray90"
+        else:
+            if self.buttons[label-1]["bg"] == "red":
+                self.buttons[label-1]["bg"] = "gray90" # Reset button color to default
+            else:
+                self.buttons[label-1]["bg"] = "red" # Toggle button color to red
+
 #########################################################################
 ######################## Random Functions ###############################
 #########################################################################
 
+ # door open label
+def door_open():
+    cmd = f'ssh {PHYS_USR}@127.0.0.1 -p {PORT} \"/home/mpotts32/bin/uswitch up {CTRL_PASS}\"'
+    print(cmd)
+    c = pexpect.spawn(cmd)
+    # Expect the password prompt and send the password
+    c.expect('password:')
+    c.sendline(PHYS_PASS)
+    print(c.read().decode('UTF-8'))
+    c.expect('$')
+    c.close()
+    
+    
+# door close label
+def door_close():
+    cmd = f'ssh {PHYS_USR}@127.0.0.1 -p {PORT} \"/home/mpotts32/bin/uswitch down {CTRL_PASS}\"'
+    print(cmd)
+    c = pexpect.spawn(cmd)
+    # Expect the password prompt and send the password
+    c.expect('password:')
+    c.sendline(PHYS_PASS)
+    print(c.read().decode('UTF-8'))
+    c.expect('$')
+    c.close()
+    
 # This method is used to load in the weather data from the desired file from the trinity weather station
 # and put everything to an array for easy access
 def weather_data(file):
