@@ -230,15 +230,6 @@ class StartPage(tk.Frame):
 
         inside_images(CAMDIR)  # runs the image the first time
 
-        # creates a def to open the file path of the inside camera images
-        def open_indoor_folder():
-            open_file(CAMDIR)
-
-        # created the button to open the indoor camera images file path
-        ttk.Button(self, text="Indoor filepath", command=open_indoor_folder).place(x=700, y=400, height=50, width=150)
-
-        # see inside camera images for information same as above
-
         def outside_images(file_path_out):
             cmd = f"{BINDIR}/update_cam.py OUTCAM {CAMDIR}"
             subprocess.run(cmd.split())
@@ -257,10 +248,10 @@ class StartPage(tk.Frame):
 
         outside_images(CAMDIR)
 
-        def open_outdoor_folder():
+        def open_cam_folder():
             open_file(CAMDIR)
 
-        ttk.Button(self, text="Outdoor filepath", command=open_outdoor_folder).place(x=1325, y=400, height=50,
+        ttk.Button(self, text="Open Camera Directory", command=open_cam_folder).place(x=1325, y=400, height=50,
                                                                                      width=150)
         ##########  End of Camera images ##########
         
@@ -505,7 +496,6 @@ Astro Twilight:       {astro_twi}Z\n'''
                 canvas.after(refresh_rate, arrow_image)
 
             arrow_image()
-            print('New Weather Plot')
             canvas.after(refresh_rate, make_plots_and_labels, weather_data_location) # refreshs the system after some time
 
         #################### End of Wind direction arrows ###################################
@@ -773,20 +763,27 @@ class RunPage(tk.Frame):
                                   exportselection=False)
         self.listbox.place(x=250, y=125)
         steps = ["Turn on CT CPU",
-                 "Power on sysems",
-                 "Initialize Subsystems",
                  "Turn on chiller",
-                 "HV Scan",
-                 "Turn on HV",
+                 "Turn on Micro TCH Crate",
+                 "Turn on Magna PS",
+                 "Power on LVPS",
+                 "Start Master Control",
+                 "Start CTM",
+                 "Sequence init",
+                 "Sequence config",
+                 "SIAB HV power ON",
                  "Check Weather",
                  "Open Pod bay door",
                  "Enable Flasher",
-                 "Trigger Scan",
                  "Start night-sky data",
                  "Stop night-sky data",
+                 "Disable Flasher",
                  "Close Pod pay door",
-                 "Turn off HV",
-                 "Power off systems",
+                 "Sequence kill",
+                 "SIAB HV power OFF",
+                 "Power off LVPS",
+                 "Turn off Magna PS",
+                 "Turn off Micro TCH Crate",
                  "Turn off chiller",
                  "Turn off CT CPU"]
         for step in steps:
@@ -935,10 +932,8 @@ class OutletPage(tk.Frame):
 
     def toggle_reboot(self):
         if self.var.get()==1:
-            print("checked")
             self.reboot = True
         else:
-            print('unchecked')
             self.reboot = False
         print(self.reboot)
             
@@ -1007,18 +1002,25 @@ def weather_data(file):
         "Twilight (Astronomical)", "X-Tilt", "Y-Tilt", "Z-Orientation", "User Information Field",
         "System Date and Time",
         "Supply Voltage", "Status", "Checksum")
+    try:
+        weather_data_array = ascii.read(file, format='no_header', data_start=0, delimiter=',', names=array_titles)
+        log_out = ascii.read(file, delimiter=',', names=array_titles)
 
-    weather_data_array = ascii.read(file, format='no_header', data_start=0, delimiter=',', names=array_titles)
-
-    # return weather_data_array
-    # print(weather_data_array)
-
-    # converts the data to an numpy array to be able to use standard array access
-    output_array = np.array(weather_data_array)
-    for i in range(len(output_array)):
-        for j in range(len(output_array[0])):
-            output_array[i][j] = ''.join(str(output_array[i][j]).split(','))
-    return output_array
+        print('\n')
+        print(log_out[-1]) # print wx to terminal
+    
+    
+        # converts the data to an numpy array to be able to use standard array access
+        output_array = np.array(weather_data_array)
+    
+        for i in range(len(output_array)):
+            for j in range(len(output_array[0])):
+                output_array[i][j] = ''.join(str(output_array[i][j]).split(','))
+        return output_array
+    except InconsistentTableError:
+        print('Inconsistant Table Error: Check WX file! Logging of the WX station may have an issue!')
+        
+        
         
 # This method is used to open the file explore on linux or windows systems
 # this code is taken from the internet
