@@ -62,7 +62,7 @@ else:
     os.environ['PHYS_PASS'] = input(f"{PHYS_HOST} Password: ")
     os.environ['PORT']      = input("Input Tunnel Port: ")
     CTRL_PASS = input("Control PC Password: ")
-    print(f'{PORT}\n{GT_HOST} {GT_USR} {GT_PASS}\n{PHYS_HOST} {PHYS_USR} {PHYS_PASS}\n{CTRL_PASS}',file=open(RESDIR + '/tmp.txt','w'))
+    print(f"{os.environ['PORT']}\n{GT_HOST} {GT_USR} {GT_PASS}\n{PHYS_HOST} {os.environ['PHYS_USR']} {os.environ['PHYS_PASS']}\n{CTRL_PASS}",file=open(RESDIR + '/tmp.txt','w'))
     
 ########## End of Login Information ###################
 
