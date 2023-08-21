@@ -1,4 +1,0 @@
-4004
-ssh.physics.gatech.edu mpotts32 trinity22!
-phys43199.physics.gatech.edu mpotts32 Ttys@210
-trinity22!
