@@ -30,12 +30,12 @@ class MoreWeatherWidget:
         global hum_dt
         hum_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Humidity_over_time.png").resize((350, 350))) # get the image import into tkinter
         self.hum_dt_label = tk.Label(self.popup, image = hum_dt)
-        self.hum_dt_label.grid(row = 2, column = 1)
+        self.hum_dt_label.grid(row = 1, column = 1)
 
         global dp_dt
         dp_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Dewpoint_over_time.png").resize((350, 350))) # get the image import into tkinter
         self.dp_dt_label = tk.Label(self.popup, image = dp_dt)
-        self.dp_dt_label.grid(row = 2, column = 2)
+        self.dp_dt_label.grid(row = 1, column = 2)
 
         close_button = tk.Button(self.popup, text="Close", command=self.popup.destroy)
-        close_button.grid(row = 3, column = 1)
+        close_button.grid(row = 2, column = 1)
