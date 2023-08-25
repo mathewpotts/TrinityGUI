@@ -155,6 +155,11 @@ def update_pdu_status():
     #print(cmd)
     return subprocess.Popen(cmd.split())
 
+def update_wx_plots():
+    cmd = f"python3 {os.environ['BINDIR']}/weather_plots.py {os.environ['WXDIR']} {os.environ['WPDIR']}"
+    #print(cmd)
+    return subprocess.Popen(cmd.split())
+
 if __name__ == "__main__":
     tunnel = create_tunnel()
 
@@ -169,6 +174,8 @@ if __name__ == "__main__":
     print(wx_proc)
     pdu_proc = update_pdu_status()
     print(pdu_proc)
+    wx2_proc = update_wx_plots()
+    print(wx2_proc)
 
     # Allow time for bg_scripts to execute fully
     print("Starting up background scripts... Sleeping 20 seconds")
@@ -185,5 +192,7 @@ if __name__ == "__main__":
     wx_proc.kill()
     print(pdu_proc)
     pdu_proc.kill()
+    print(wx2_proc)
+    wx2_proc.kill()
     
     tunnel.close()

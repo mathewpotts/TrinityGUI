@@ -1,9 +1,11 @@
 import tkinter as tk
 import os
 from PIL import ImageTk, Image
+from .more_weather import MoreWeatherWidget
 
 class WeatherWidget:
     def __init__(self, root):
+        self.root = root
         self.popup = tk.Toplevel(root)
         self.popup.title("Weather")
 
@@ -17,7 +19,7 @@ class WeatherWidget:
         self.over_label = tk.Label(self.popup, image = over_img)
         self.over_label.grid(row = 0, column = 1)
 
-        plots_button = tk.Button(self.popup, text="WX Plots", command=self.popup.destroy)
+        plots_button = tk.Button(self.popup, text="WX Plots", command=self.open_more_wx)
         plots_button.grid(row = 1, column = 0)
         
         close_button = tk.Button(self.popup, text="Close", command=self.popup.destroy)
@@ -25,6 +27,9 @@ class WeatherWidget:
 
         # Start the update_img function that will update the widget page every 60 seconds 
         self.update_img()
+
+    def open_more_wx(self):
+        MoreWeatherWidget(self.root)
 
     def update_img(self):
         comp_img = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/wind_direction.png").resize((350, 350))) # get the image import into tkinter
