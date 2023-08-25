@@ -19,6 +19,7 @@ from widgets.cameras import CameraWidget
 from widgets.weather import WeatherWidget
 from widgets.outlets import OutletWidget
 from widgets.door import DoorWidget
+from widgets.runlist import RunlistWidget
 
 #######################################################
 ################## User File paths ####################
@@ -92,7 +93,7 @@ class GUI:
         door_button = tk.Button(root, text="Door", command=self.open_doors)
         door_button.pack(pady=10)
 
-        runlist_button = tk.Button(root, text="Observation Run", command=self.open_outlets)
+        runlist_button = tk.Button(root, text="Observation Run", command=self.open_runlist)
         runlist_button.pack(pady=10)
         
         quit_button = tk.Button(root, text="Quit", command=self.root.quit)
@@ -109,6 +110,9 @@ class GUI:
 
     def open_doors(self):
         DoorWidget(self.root)
+
+    def open_runlist(self):
+        RunlistWidget(self.root)
         
         
 def main():
