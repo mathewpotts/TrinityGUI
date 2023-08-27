@@ -10,10 +10,11 @@ import time
 import matplotlib.pyplot as plt
 from PIL import ImageTk, Image
 from astropy.io import ascii
-
 class weather_plots:
     def __init__(self,WXDIR,WPDIR):
         # data string format of the wx station
+        # Relative here refers to the notch that is in the wx station that has been position
+        # so that it faces North
         self.array_titles = (
             "Node", "RelativeWindDirection", "RelativeWindSpeed",
             "CorrectedWindDirection","AverageRelativeWindDirection","AverageRelativeWindSpeed",
@@ -40,6 +41,8 @@ class weather_plots:
             # init the data arrays and fill them
             globals()[f'{filename}_size'] = len(globals()[f'{filename}_data'])
             globals()[f'{filename}_wind_direction'] = [0] * globals()[f'{filename}_size']
+            globals()[f'{filename}_wind_gust_direction'] = [0] * globals()[f'{filename}_size']
+            globals()[f'{filename}_wind_gust_speed'] = [0] * globals()[f'{filename}_size']
             globals()[f'{filename}_date_n_time'] = [0] * globals()[f'{filename}_size']
             globals()[f'{filename}_date'] = [0] * globals()[f'{filename}_size']
             globals()[f'{filename}_tempature'] = [0] * globals()[f'{filename}_size']
@@ -61,7 +64,7 @@ class weather_plots:
         self.insta_wx_plot()
         self.fig3, self.ax = plt.subplots(figsize=(7, 6))
         plt.axis('equal')  # do not remove this makes it work??? .... magic
-        self.wind_speed_plot(25, 0)
+        self.wind_speed_plot(globals()[f'{self.filelist[-1]}_wind_speed'][-1],globals()[f'{self.filelist[-1]}_wind_direction'][-1])
 
     def weather_data(self, file):
         try:
@@ -87,10 +90,12 @@ class weather_plots:
         for i in range(globals()[f'{filename}_size']):
             globals()[f'{filename}_tempature'][i] = float(all_data[i][14])
             globals()[f'{filename}_wind_speed'][i] = float(all_data[i][2])
+            globals()[f'{filename}_wind_gust_speed'][i] = float(all_data[i][7])
             globals()[f'{filename}_humidity'][i] = float(all_data[i][13])
             globals()[f'{filename}_dew_point'][i] = float(all_data[i][15])
             globals()[f'{filename}_pressure'][i] = float(all_data[i][12])
             globals()[f'{filename}_wind_direction'][i] = int(all_data[i][1])
+            globals()[f'{filename}_wind_gust_direction'][i] = int(all_data[i][6])
             globals()[f'{filename}_date_n_time'][i] = str(all_data[i][33])
             globals()[f'{filename}_date'][i] = datetime.datetime.strptime(str(all_data[i][33])[:19], "%Y-%m-%dT%H:%M:%S")
             globals()[f'{filename}_sunrise'][i] = str(all_data[i][22])
@@ -131,33 +136,34 @@ class weather_plots:
     def insta_wx_plot(self):
         tempature = float(globals()[f'{self.filelist[1]}_tempature'][-1])
         wind_speed = float(globals()[f'{self.filelist[1]}_wind_speed'][-1])
+        wind_direction = int(globals()[f'{self.filelist[1]}_wind_direction'][-1])
+        gust_speed = float(globals()[f'{self.filelist[1]}_wind_gust_speed'][-1])
+        gust_direction = int(globals()[f'{self.filelist[1]}_wind_gust_direction'][-1])
         humidity = float(globals()[f'{self.filelist[1]}_humidity'][-1])
         dew_point = float(globals()[f'{self.filelist[1]}_dew_point'][-1])
         pressure = float(globals()[f'{self.filelist[1]}_pressure'][-1])
-        wind_direction = int(globals()[f'{self.filelist[1]}_wind_direction'][-1])
         date_n_time = globals()[f'{self.filelist[1]}_date_n_time'][-1]
         sun_rise = str(globals()[f'{self.filelist[1]}_sunrise'][-1])
         sun_set = str(globals()[f'{self.filelist[1]}_sunset'][-1])
-        civil_twi = str(globals()[f'{self.filelist[1]}_civil_twi'][-1])
-        astro_twi = str(globals()[f'{self.filelist[1]}_astro_twi'][-1])
+        #civil_twi = str(globals()[f'{self.filelist[1]}_civil_twi'][-1])
+        #astro_twi = str(globals()[f'{self.filelist[1]}_astro_twi'][-1])
 
         plt.figure(figsize=(7, 6))
         x = np.arange(-10, 10, 0.01)
         y = x ** 2
         
-        weather_label_text = f'''
-        Temperature:       {tempature}{chr(176)}C\n \
-        Wind Speed:       {wind_speed} m/s\n \
-        Humidity:            {humidity}%\n \
-        Pressure:             {pressure}\n \
-        Wind Direction:   {wind_direction}{chr(176)}(N of E)\n \
-        Dew Point           {dew_point}{chr(176)}C\n \
-        Sunrise:               {sun_rise}Z\n \
-        Sunset:                {sun_set}Z\n \
-        Civil Twilight:        {civil_twi}Z\n \
-        Astro Twilight:       {astro_twi}Z\n''' 
+        weather_label_text = [f"Temperature:      {tempature}{chr(176)}C",
+                              f"Wind Speed:       {wind_speed} kts",
+                              f"Wind Direction:   {wind_direction}{chr(176)}",
+                              f"Gust Speed:       {gust_speed} kts",
+                              f"Gust Direction:   {gust_direction}{chr(176)}",
+                              f"Humidity:         {humidity}%",
+                              f"Pressure:         {pressure} hPa",
+                              f"Dew Point         {dew_point}{chr(176)}C",
+                              f"Sunrise:          {sun_rise}Z",
+                              f"Sunset:           {sun_set}Z"] 
         # adding text inside the plot
-        plt.text(-10, 0, weather_label_text , fontsize=24)
+        plt.text(-10, 0, '\n'.join(weather_label_text) , fontsize=24 , fontfamily='monospace',horizontalalignment='left')
         
         
         plt.plot(x, y, c='g', alpha=0)
