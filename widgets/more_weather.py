@@ -8,27 +8,27 @@ class MoreWeatherWidget:
         self.popup.title("More Weather")
 
         global wind_dir_dt
-        wind_dir_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Wind_direction_over_time.png").resize((350, 350))) # get the image import into tkinter
+        wind_dir_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Wind_Direction.png").resize((350, 350))) # get the image import into tkinter
         self.wind_dir_dt_label = tk.Label(self.popup, image = wind_dir_dt)
         self.wind_dir_dt_label.grid(row = 0, column = 0)
 
         global wind_v_dt
-        wind_v_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Wind_speed_over_time.png").resize((350, 350))) # get the image import into tkinter
+        wind_v_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Wind_Speed.png").resize((350, 350))) # get the image import into tkinter
         self.wind_v_dt_label = tk.Label(self.popup, image = wind_v_dt)
         self.wind_v_dt_label.grid(row = 0, column = 1)
 
         global temp_dt
-        temp_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Temperature_over_time.png").resize((350, 350))) # get the image import into tkinter
+        temp_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Temperature.png").resize((350, 350))) # get the image import into tkinter
         self.temp_dt_label = tk.Label(self.popup, image = temp_dt)
         self.temp_dt_label.grid(row = 0, column = 2)
 
         global pressure_dt
-        pressure_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Pressure_over_time.png").resize((350, 350))) # get the image import into tkinter
+        pressure_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Pressure.png").resize((350, 350))) # get the image import into tkinter
         self.pressure_dt_label = tk.Label(self.popup, image = pressure_dt)
         self.pressure_dt_label.grid(row = 1, column = 0)
 
         global hum_dt
-        hum_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Humidity_over_time.png").resize((350, 350))) # get the image import into tkinter
+        hum_dt = ImageTk.PhotoImage(Image.open(f"{os.environ['WPDIR']}/Humidity.png").resize((350, 350))) # get the image import into tkinter
         self.hum_dt_label = tk.Label(self.popup, image = hum_dt)
         self.hum_dt_label.grid(row = 1, column = 1)
 

@@ -121,8 +121,8 @@ class weather_plots:
                     #plt.locator_params(axis='x', nbins=3)
 
                     fig.canvas.draw()  # create the canvas
-                    plt.savefig(f'{self.WPDIR}/{title}.png')  # save the image as a png
-                    pickle.dump(fig, open(f'{self.WPDIR}/{title}.pickle','wb'))  # save the image as a pickle so that it can be view in python again
+                    plt.savefig(f"{self.WPDIR}/{title.replace(' ','_')}.png")  # save the image as a png
+                    pickle.dump(fig, open(f"{self.WPDIR}/{title.replace(' ','_')}",'wb'))  # save the image as a pickle so that it can be view in python again
                     fig.clear()  # clear the plot
                     fig.clf()  # clear the plot ----- This is import so that only one plot is used and reducind the ram needed to run the program
 
