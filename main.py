@@ -35,6 +35,7 @@ LWPDIR = LHOMEDIR + 'weather_plots/' # directory for the weather plots
 # Linux Machine anywhere
 HOMEDIR   = os.path.abspath(os.curdir)
 RESDIR    = HOMEDIR + "/resources/"
+WIDDIR    = HOMEDIR + "/widgets/"
 os.environ['BINDIR']    = RESDIR + "/bg_scripts/" # set this as an environmental variable
 os.environ['CAMDIR']    = RESDIR + "cams/" # set this as an environmental variable
 os.environ['WXDIR']     = RESDIR + "weather/"# set this as an environmental variable
@@ -95,6 +96,9 @@ class GUI:
 
         runlist_button = tk.Button(root, text="Observation Run", command=self.open_runlist)
         runlist_button.pack(pady=10)
+
+        SAM_button = tk.Button(root, text="SAM", command=self.open_SAM)
+        SAM_button.pack(pady=10)
         
         quit_button = tk.Button(root, text="Quit", command=self.root.quit)
         quit_button.pack(pady=20)
@@ -113,6 +117,12 @@ class GUI:
 
     def open_runlist(self):
         RunlistWidget(self.root)
+
+    def open_SAM(self):
+        SAM = WIDDIR + "/SAM"
+        cmd = f"python3 {SAM}/SPB2Obs.py -loc {SAM}/gpsLocation.txt -obj {SAM}/input0.txt -elv 2000"
+        print(cmd)
+        return subprocess.Popen(cmd.split())
         
         
 def main():

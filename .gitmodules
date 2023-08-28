@@ -1,0 +1,3 @@
+[submodule "widgets/SAM"]
+	path = widgets/SAM
+	url = https://github.com/mathewpotts/SPB2Obs.git
