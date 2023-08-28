@@ -10,6 +10,7 @@ import time
 import matplotlib.pyplot as plt
 from PIL import ImageTk, Image
 from astropy.io import ascii
+
 class weather_plots:
     def __init__(self,WXDIR,WPDIR):
         # data string format of the wx station
@@ -64,7 +65,7 @@ class weather_plots:
         self.insta_wx_plot()
         self.fig3, self.ax = plt.subplots(figsize=(7, 6))
         plt.axis('equal')  # do not remove this makes it work??? .... magic
-        self.wind_speed_plot(globals()[f'{self.filelist[-1]}_wind_speed'][-1],globals()[f'{self.filelist[-1]}_wind_direction'][-1])
+        self.wind_speed_plot(globals()[f'{self.filelist[-1]}_wind_speed'][-1],globals()[f'{self.filelist[-1]}_wind_direction'][-1],globals()[f'{self.filelist[-1]}_wind_gust_speed'][-1],globals()[f'{self.filelist[-1]}_wind_gust_direction'][-1])
 
     def weather_data(self, file):
         try:
@@ -126,12 +127,12 @@ class weather_plots:
                     fig.clf()  # clear the plot ----- This is import so that only one plot is used and reducind the ram needed to run the program
 
 
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_wind_direction']+globals()[f'{self.filelist[1]}_wind_direction'], 'Date', 'Wind Direction (Degrees)', 'Wind_direction_over_time','green', self.fig, thick=0.1)
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_tempature']+globals()[f'{self.filelist[1]}_tempature'], 'Date', 'Tempature (Degrees)', 'Temperature_over_time', 'red', self.fig)
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_humidity']+globals()[f'{self.filelist[1]}_humidity'], 'Date', 'Humidity (Percent)', 'Humidity_over_time', 'blue', self.fig)
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_wind_speed']+globals()[f'{self.filelist[1]}_wind_speed'], 'Date', 'Wind Speed (units)', 'Wind_speed_over_time', 'purple', self.fig,thick=0.1)
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_dew_point']+globals()[f'{self.filelist[1]}_dew_point'], 'Date', 'Dew Point (Degrees)', 'Dewpoint_over_time', 'orange', self.fig)
-        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_pressure']+globals()[f'{self.filelist[1]}_pressure'], 'Date', 'Pressure (units)', 'Pressure_over_time', 'pink', self.fig)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_wind_direction']+globals()[f'{self.filelist[1]}_wind_direction'], 'Date', 'Wind Direction (Degrees)', 'Wind Direction','green', self.fig, thick=0.1)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_tempature']+globals()[f'{self.filelist[1]}_tempature'], 'Date', 'Tempature (Degrees C)', 'Temperature', 'red', self.fig)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_humidity']+globals()[f'{self.filelist[1]}_humidity'], 'Date', 'Humidity (Percent)', 'Humidity', 'blue', self.fig)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_wind_speed']+globals()[f'{self.filelist[1]}_wind_speed'], 'Date', 'Wind Speed (Knots)', 'Wind Speed', 'purple', self.fig,thick=0.1)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_dew_point']+globals()[f'{self.filelist[1]}_dew_point'], 'Date', 'Dew Point (Degrees C)', 'Dewpoint', 'orange', self.fig)
+        plot_format(globals()[f'{self.filelist[0]}_date']+globals()[f'{self.filelist[1]}_date'], globals()[f'{self.filelist[0]}_pressure']+globals()[f'{self.filelist[1]}_pressure'], 'Date', 'Pressure (hPa)', 'Pressure', 'pink', self.fig)
 
     def insta_wx_plot(self):
         tempature = float(globals()[f'{self.filelist[1]}_tempature'][-1])
@@ -174,7 +175,7 @@ class weather_plots:
     
 ################### Wind direction arrows #################
             # def to make the angle and all the other information on the plot
-    def wind_speed_plot(self,wind_speed, angle):
+    def wind_speed_plot(self,wind_speed, angle,gust_speed,gust_angle):
         self.ax.set_xlim(-50, 50)
         self.ax.set_ylim(-50, 50)
         plt.axis('off')
@@ -191,10 +192,13 @@ class weather_plots:
         
         # takes the angle from degrees to radians
         cartesianAngleRadians = (450 - angle) * math.pi / 180.0
+        gcartesianAngleRadians = (450 - gust_angle) * math.pi / 180.0
         # creates the length of change of the arrows based on the size of windspeed
         terminus_x = wind_speed * math.cos(cartesianAngleRadians)
         terminus_y = wind_speed * math.sin(cartesianAngleRadians)
-
+        gterminus_x = gust_speed * math.cos(gcartesianAngleRadians)
+        gterminus_y = gust_speed * math.sin(gcartesianAngleRadians)
+        
         # plots the circles for wind speed
         low_speed = plt.Circle((0, 0), 10, fill=False, color='black')
         meduim_speed = plt.Circle((0, 0), 20, fill=False, color='black')
@@ -215,14 +219,17 @@ class weather_plots:
         # based on different wind speeds differnet arrows are plotted
         if wind_speed <= 10:  # low speeds will be blue
             plt.arrow(0, 0, terminus_x, terminus_y, head_width=1, width=0.5, color='blue')
+            plt.arrow(0,0,gterminus_x,gterminus_y,head_width=1, width=0.5,color='blue',alpha=0.5)
         elif 10 < wind_speed < 25:  # meduim speeds will be black
             plt.arrow(0, 0, terminus_x, terminus_y, head_width=2, width=0.75, color='black')
+            plt.arrow(0,0,gterminus_x,gterminus_y,head_width=2, width=0.75,color='black',alpha=0.5)
         elif wind_speed >= 25:
         # if the wind speed is greater than 35 m/s then the arrow will stop getting bigger but it will turn red to indicate
             # high wind speed
             #terminus_x = 35 * math.cos(cartesianAngleRadians)
             #terminus_y = 35 * math.sin(cartesianAngleRadians)
-            plt.arrow(0, 0, terminus_x, terminus_y, head_width=2, width=0.75, color='red', alpha=0.7)
+            plt.arrow(0, 0, terminus_x, terminus_y, head_width=3, width=1, color='red')
+            plt.arrow(0,0,gterminus_x,gterminus_y,head_width=3, width=1,color='red',alpha=0.5)
 
         # puts the speed cicles on the plot
         self.ax.add_patch(low_speed)
