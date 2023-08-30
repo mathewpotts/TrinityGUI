@@ -2,14 +2,13 @@ import tkinter as tk
 import os
 import pickle
 import subprocess
-import ast
 
 class OutletWidget:
     def __init__(self, root, LCF):
         self.popup = tk.Toplevel(root)
         self.popup.title("Outlet Control Page")
 
-        self.LCF = ast.literal_eval(LCF)
+        self.LCF = LCF
         
         # Page title
         label = tk.Label(self.popup, text="Outlet Control Page")

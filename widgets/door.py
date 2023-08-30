@@ -1,15 +1,14 @@
 import tkinter as tk
 import os
 import subprocess
-import ast
 
 class DoorWidget:
     def __init__(self, root, LCF):
         self.popup = tk.Toplevel(root)
         self.popup.title("Door Control")
 
-        self.LCF = ast.literal_eval(LCF)
-
+        self.LCF = LCF
+        
         open_button = tk.Button(self.popup, text="Open Door", command=lambda dir='up': self.door_control(dir))
         open_button.grid(row = 0, column = 0)
 
