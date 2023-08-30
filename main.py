@@ -183,14 +183,14 @@ def login_info(LCF):
             print(f"{os.environ['PORT']}\n{os.environ['GT_HOST']} {os.environ['GT_USR']} {os.environ['GT_PASS']}\n{os.environ['PHYS_HOST']} {os.environ['PHYS_USR']} {os.environ['PHYS_PASS']}\n{os.environ['CTRL_PASS']}",file=open(RESDIR + '/tmp.txt','w'))
             ########## End of Login Information ###################
     else:
-        os.environ['GT_HOST']   = ''
-        os.environ['GT_USR']    = ''
-        os.environ['GT_PASS']   = ''
-        os.environ['PHYS_HOST'] = ''
-        os.environ['PHYS_USR']  = ''
-        os.environ['PHYS_PASS'] = ''
-        os.environ['PORT']      = ''
-        os.environ['CTRL_PASS'] = ''
+        os.environ['GT_HOST']   = 'tmp'
+        os.environ['GT_USR']    = 'tmp'
+        os.environ['GT_PASS']   = 'tmp'
+        os.environ['PHYS_HOST'] = 'tmp'
+        os.environ['PHYS_USR']  = 'tmp'
+        os.environ['PHYS_PASS'] = 'tmp'
+        os.environ['PORT']      = 'tmp'
+        os.environ['CTRL_PASS'] = 'tmp'
 
 if __name__ == "__main__":
     args = parse_args()
