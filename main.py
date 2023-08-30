@@ -182,6 +182,15 @@ def login_info(LCF):
             os.environ['CTRL_PASS'] = input("Control PC Password: ")
             print(f"{os.environ['PORT']}\n{os.environ['GT_HOST']} {os.environ['GT_USR']} {os.environ['GT_PASS']}\n{os.environ['PHYS_HOST']} {os.environ['PHYS_USR']} {os.environ['PHYS_PASS']}\n{os.environ['CTRL_PASS']}",file=open(RESDIR + '/tmp.txt','w'))
             ########## End of Login Information ###################
+    else:
+        os.environ['GT_HOST']   = ''
+        os.environ['GT_USR']    = ''
+        os.environ['GT_PASS']   = ''
+        os.environ['PHYS_HOST'] = ''
+        os.environ['PHYS_USR']  = ''
+        os.environ['PHYS_PASS'] = ''
+        os.environ['PORT']      = ''
+        os.environ['CTRL_PASS'] = ''
 
 if __name__ == "__main__":
     args = parse_args()
