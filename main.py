@@ -128,6 +128,7 @@ def create_tunnel():
     return ssh
 
 def update_images():
+    print("Camera Images BG Process Start...")
     CAMS = ['IN','OUT']
     proc_ls = []
     for cam in CAMS:
@@ -137,16 +138,19 @@ def update_images():
     return proc_ls
 
 def update_wx(LCF):
+    print("Weather Data BG Process Start...")
     cmd = f"python3 {os.environ['BINDIR']}/update_wx.py {os.environ['PORT']} {os.environ['PHYS_USR']} {os.environ['PHYS_PASS']} {os.environ['LWXDIR']} {os.environ['WXDIR']} {LCF}"
     #print(cmd)
     return subprocess.Popen(cmd.split())
 
 def update_pdu_status(LCF):
+    print("PDU Status BG Process Start...")
     cmd = f"python3 {os.environ['BINDIR']}/update_pdu_status.py {os.environ['PORT']} {os.environ['PHYS_USR']} {os.environ['PHYS_PASS']} {LCF}"
     #print(cmd)
     return subprocess.Popen(cmd.split())
 
 def update_wx_plots():
+    print("Weather Plots BG Process Start...")
     cmd = f"python3 {os.environ['BINDIR']}/weather_plots.py {os.environ['WXDIR']} {os.environ['WPDIR']}"
     #print(cmd)
     return subprocess.Popen(cmd.split())
