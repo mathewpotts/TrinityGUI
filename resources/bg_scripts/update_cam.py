@@ -12,8 +12,7 @@ IMG = sys.argv[1]
 # Path to the program resources directory
 PATH = sys.argv[2]
 
-
-while True:
+while True: 
     # Image from web
     cmd = f'wget -q https://trinity.physics.gatech.edu/wp-content/uploads/demonstrator-uploads/{IMG}.jpg -O {PATH}/{IMG}.jpg'
     subprocess.Popen(cmd.split())
