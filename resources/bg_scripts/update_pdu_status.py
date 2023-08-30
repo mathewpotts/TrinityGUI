@@ -5,12 +5,13 @@ import os
 import time
 import re
 import pickle
+import ast
 
 # Inputs
 PORT      = sys.argv[1]
 PHYS_USR  = sys.argv[2]
 PHYS_PASS = sys.argv[3]
-LCF       = sys.argv[4]
+LCF       = ast.literal_eval(sys.argv[4])
 
 cabs = ['wc','rc']
 # Construct the rsync command with the --files-from flag and the find command to filter files
@@ -28,8 +29,9 @@ while True:
     rc_loads = {}
     try:
         for i,cab in enumerate(cabs):
-            cmd1 = f'sshpass -p {PHYS_PASS} ssh -p {PORT} {PHYS_USR}@127.0.0.1  \'/home/mpotts32/control_comp/outletcontrol.exp {cab} status\'' if LCF else f"/home/mpotts32/control_comp/outletcontrol.exp {cab} status"
-            cmd2 = f'sshpass -p {PHYS_PASS} ssh -p {PORT} {PHYS_USR}@127.0.0.1  \'/home/mpotts32/control_comp/outletcontrol.exp {cab} load\'' if LCF else f"/home/mpotts32/control_comp/outletcontrol.exp {cab} load"
+            cmd1 = f'sshpass -p {PHYS_PASS} ssh -p {PORT} {PHYS_USR}@127.0.0.1  \'/home/mpotts32/control_comp/outletcontrol.exp {cab} status\'' if not LCF else f"/home/mpotts32/control_comp/outletcontrol.exp {cab} status"
+            cmd2 = f'sshpass -p {PHYS_PASS} ssh -p {PORT} {PHYS_USR}@127.0.0.1  \'/home/mpotts32/control_comp/outletcontrol.exp {cab} load\'' if not LCF else f"/home/mpotts32/control_comp/outletcontrol.exp {cab} load"
+            #print(sys.argv[4],LCF,type(LCF),cmd1,cmd2)
 
             # Execute the commands and grab output
             out1 = os.popen(cmd1)
