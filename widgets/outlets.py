@@ -190,7 +190,7 @@ class OutletWidget:
 
     def outlet_control(self,cab,index,action):
         if self.LCF:
-            full_cmd = [f"/home/mpotts32/control_comp/outletcontrol.exp' {cab} {index} {action}"]
+            full_cmd = ["/home/mpotts32/control_comp/outletcontrol.exp", f"{cab}", f"{index}", f"{action}"]
         else:
             sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
             ssh_cmd = [

@@ -20,7 +20,7 @@ class DoorWidget:
 
     def door_control(self,direction):
         if self.LCF:
-            full_cmd = [f"'/home/mpotts32/control_comp/doorcontrol.exp' {direction}"]
+            full_cmd = ["/home/mpotts32/control_comp/doorcontrol.exp", f"{direction}"]
         else:    
             sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
             ssh_cmd = [
