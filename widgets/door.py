@@ -1,11 +1,14 @@
 import tkinter as tk
 import os
 import subprocess
+import ast
 
 class DoorWidget:
-    def __init__(self, root):
+    def __init__(self, root, LCF):
         self.popup = tk.Toplevel(root)
         self.popup.title("Door Control")
+
+        self.LCF = ast.literal_eval(LCF)
 
         open_button = tk.Button(self.popup, text="Open Door", command=lambda dir='up': self.door_control(dir))
         open_button.grid(row = 0, column = 0)
@@ -17,12 +20,15 @@ class DoorWidget:
         close_button.grid(row = 0, column = 2)
 
     def door_control(self,direction):
-        sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
-        ssh_cmd = [
-            "ssh", "-p", os.environ['PORT'],
-            f"{os.environ['PHYS_USR']}@127.0.0.1",
-            f"'/home/mpotts32/control_comp/doorcontrol.exp' {direction}"
-        ]
-        full_cmd = sshpass_cmd + ssh_cmd
+        if self.LCF:
+            full_cmd = [f"'/home/mpotts32/control_comp/doorcontrol.exp' {direction}"]
+        else:    
+            sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
+            ssh_cmd = [
+                "ssh", "-p", os.environ['PORT'],
+                f"{os.environ['PHYS_USR']}@127.0.0.1",
+                f"'/home/mpotts32/control_comp/doorcontrol.exp' {direction}"
+            ]
+            full_cmd = sshpass_cmd + ssh_cmd
         print(" ".join(full_cmd))
         proc = subprocess.Popen(full_cmd)

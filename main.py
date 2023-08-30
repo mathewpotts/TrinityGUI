@@ -15,6 +15,7 @@ import numpy as np
 import pickle
 import subprocess
 import pexpect
+import ast
 from tkinter import messagebox
 from widgets.cameras import CameraWidget
 from widgets.weather import WeatherWidget
@@ -46,9 +47,11 @@ os.environ['WPDIR']     = RESDIR + "weather_plots/"
 
 
 class GUI:
-    def __init__(self, root):
+    def __init__(self, root, LCF):
         self.root = root
         self.root.title("Main Application")
+
+        self.LCF = LCF
 
         logo_path = RESDIR + "/trinity-logo.png"
         global logo
@@ -87,10 +90,10 @@ class GUI:
         WeatherWidget(self.root)
 
     def open_outlets(self):
-        OutletWidget(self.root)
+        OutletWidget(self.root,self.LCF)
 
     def open_doors(self):
-        DoorWidget(self.root)
+        DoorWidget(self.root,self.LCF)
 
     def open_runlist(self):
         RunlistWidget(self.root)
@@ -102,9 +105,9 @@ class GUI:
         return subprocess.Popen(cmd.split())
         
         
-def main():
+def main(LCF):
     root = tk.Tk()
-    app = GUI(root)
+    app = GUI(root,LCF)
     root.mainloop()
 
 # This function is used to read an SSH tunnel to the lab computer.
@@ -224,7 +227,7 @@ if __name__ == "__main__":
     time.sleep(20)
 
     # Start GUI
-    main()
+    main(LCF)
 
     # End background scripts
     for proc in cam_procs:

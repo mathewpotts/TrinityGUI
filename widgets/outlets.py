@@ -2,11 +2,14 @@ import tkinter as tk
 import os
 import pickle
 import subprocess
+import ast
 
 class OutletWidget:
-    def __init__(self, root):
+    def __init__(self, root, LCF):
         self.popup = tk.Toplevel(root)
         self.popup.title("Outlet Control Page")
+
+        self.LCF = ast.literal_eval(LCF)
         
         # Page title
         label = tk.Label(self.popup, text="Outlet Control Page")
@@ -187,13 +190,16 @@ class OutletWidget:
         self.popup.after(60000,self.update_page)
 
     def outlet_control(self,cab,index,action):
-        sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
-        ssh_cmd = [
+        if self.LCF:
+            full_cmd = [f"/home/mpotts32/control_comp/outletcontrol.exp' {cab} {index} {action}"]
+        else:
+            sshpass_cmd = ["sshpass", "-p", os.environ['PHYS_PASS']]
+            ssh_cmd = [
             "ssh", "-p", os.environ['PORT'],
             f"{os.environ['PHYS_USR']}@127.0.0.1",
             f"'/home/mpotts32/control_comp/outletcontrol.exp' {cab} {index} {action}"
         ]
-        full_cmd = sshpass_cmd + ssh_cmd
+            full_cmd = sshpass_cmd + ssh_cmd
         print(" ".join(full_cmd))
         proc = subprocess.Popen(full_cmd)
         
